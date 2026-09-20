@@ -216,10 +216,36 @@ Git объединяет информацию о коммите (автор, д�
 * **Что значит:** Измененные или новые файлы, которые вы добавили в "зону ожидания" (индекс) командой `git add`. Именно эти изменения попадут в следующий коммит.
 * **В `git status`:** Отображаются в секции `Changes to be committed` (зеленый цвет).
 
-#### 4. Unmodified (Неизмененные)
+#### 4. Tracked (Unmodified или Неизмененные)
 * **Что значит:** Файлы, которые не менялись со времени последнего коммита. 
 * **В `git status`:** Они вообще **не отображаются**, так как Git фиксирует только изменения. Если все файлы в этом статусе, `git status` напишет: *"nothing to commit, working tree clean"*.
 
+```mermaid
+graph TD
+    %% Определение стилей для узлов
+    classDef untracked fill:#f9f9f9,stroke:#ccc,stroke-width:2px,color:#333;
+    classDef unmodified fill:#e1f5fe,stroke:#03a9f4,stroke-width:2px,color:#01579b;
+    classDef modified fill:#ffebee,stroke:#ef5350,stroke-width:2px,color:#c62828;
+    classDef staged fill:#e8f5e9,stroke:#66bb6a,stroke-width:2px,color:#2e7d32;
+
+    %% Узлы (Статусы)
+    U[Untracked <br> Неотслеживаемый]:::untracked
+    UN[Unmodified <br> Неизмененный]:::unmodified
+    M[Modified <br> Измененный]:::modified
+    S[Staged <br> Подготовленный]:::staged
+
+    %% Переходы и команды
+    U -->|git add| S
+    UN -->|Редактирование файла| M
+    M -->|git add| S
+    
+    S -->|git restore --staged| M
+    S -->|git commit| UN
+    M -->|git checkout / git restore| UN
+
+    %% Настройка связей
+    linkStyle default stroke:#555,stroke-width:2px;
+```
 ---
 
 ### Шпаргалка по командам перемещения между статусами
